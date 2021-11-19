@@ -1,0 +1,16 @@
+
+.email{
+  color: blue;
+  font-style: oblique;
+  margin: 0 0.2rem;
+}
+.hs{
+  color: chocolate;
+  font-style: normal;
+  margin: 0 0.2rem;
+}
+.msn{
+  color: green;
+  font-style: italic;
+  margin: 0 0.2rem;
+}
