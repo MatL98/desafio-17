@@ -26,17 +26,19 @@ const render = (data) => {
   };
   
   const addMsn = () => {
-    let msg = {
-      mail: document.querySelector("#mail").value,
-      name: document.querySelector("#name").value,
-      lastName: document.querySelector("#lastName").value,
-      age: document.querySelector("#age").value,
-      alias: document.querySelector("#alias").value,
-      avatar: document.querySelector("#avatar").value,
-      msn: document.querySelector("#message").value,
+    let data = {
+      author:{
+        mail: document.querySelector("#mail").value,
+        name: document.querySelector("#name").value,
+        lastName: document.querySelector("#lastName").value,
+        age: document.querySelector("#age").value,
+        alias: document.querySelector("#alias").value,
+        avatar: document.querySelector("#avatar").value,
+      },
+      msn: document.querySelector("#message").value
     };
     let ms = document.querySelector("#message").value = " "
     
-    socket.emit("new-message", msg);
+    socket.emit("new-message", data);
     return false;
   };

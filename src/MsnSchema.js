@@ -1,10 +1,10 @@
-import mongoose from "mongoose";
+const {Schema, model} = require("mongoose");
 
 const msnCollection = 'mensajes'
 
-const MsnSchema = new mongoose.Schema({
+const MsnSchema = new Schema({
 
-  author: {
+  author:{
     id: {type: String, require: true},
     name: {type: String, require: true},
     lastName: {type: String, require: true},
@@ -13,6 +13,9 @@ const MsnSchema = new mongoose.Schema({
     avatar: {type: String, require: true}
   },
   text: {type: String, require: true}
+  
 })
 
-export const msn = mongoose.model(msnCollection, MsnSchema)
+module.exports = model(msnCollection, MsnSchema)
+
+

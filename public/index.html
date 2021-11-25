@@ -9,7 +9,7 @@
       integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="/styles.css">
     <title>Document</title>
   </head>
 <body>
@@ -20,31 +20,31 @@
       <form onsubmit="return addMsn()">
 			<div class="mb-3">
 				<label for="exampleInputEmail1" class="form-label">Email</label>
-				<input type="email" class="form-control" id="mail" aria-describedby="emailHelp">
+				<input type="email" class="form-control" name="mail" id="mail" aria-describedby="emailHelp">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Nombre</label>
-				<input type="text" class="form-control" id="name">
+				<input type="text" class="form-control" name="name" id="name">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Apellido</label>
-				<input type="text" class="form-control" id="lastName">
+				<input type="text" class="form-control" name="lastName" id="lastName">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Edad</label>
-				<input type="number" class="form-control" id="age">
+				<input type="number" class="form-control" name="age" id="age">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Alias</label>
-				<input type="text" class="form-control" id="alias">
+				<input type="text" class="form-control" name="alias" id="alias">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Avatar</label>
-				<input type="text" class="form-control" id="avatar">
+				<input type="text" class="form-control" name="avatar" id="avatar">
 			</div>
 			<div class="mb-3">
 				<label for="example" class="form-label">Mensajes</label>
-				<input type="text" class="form-control" id="message">
+				<input type="text" class="form-control" name="message" id="message">
 			</div>
 			<button type="submit" class="btn btn-secondary">Enviar</button>
 		</form>
@@ -52,6 +52,6 @@
 		<div id="box" class="container"></div>
 
         <script src="/socket.io/socket.io.js"></script>
-        <script src="index.js"></script>
+        <script src="/index.js"></script>
 </body>
 </html>
