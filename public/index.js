@@ -3,13 +3,13 @@ const socket = io();
 socket.on("message", (data) => {
   console.log(data);
   render(data);
-  socket.emit("message-client", "Muchas gracias por su respuesta");
+  socket.emit("message-client", "");
 });
 
 const render = (data) => {
   let hs = new Date()
-  let html = data
-  .map((x) => {
+  let html = 
+  data.map((x) => {
     return ` <div class="container d-flex justify-content-start py-4">
     <h3 class="email">${x.mail}</h3> <p class="hs" >${hs}:</p> 
     <p class="msn">${x.name}</p> 

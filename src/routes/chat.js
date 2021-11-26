@@ -19,8 +19,14 @@ router.get("/mensajes", async (req, res)=>{
     author: schemaAutor
   })
   const normalizedChat = normalize(getMns[0], mySchema)
+  const compressChat = JSON.stringify(normalizedChat).length
   const denormalizeChat = denormalize(normalizedChat.result, mySchema, normalizedChat.entities)
-  res.send({normalizr: normalizedChat})
+  const descompressChat = JSON.stringify(denormalizeChat).length
+  console.log(compressChat, descompressChat);
+  const compress = ((compressChat*100)/descompressChat)
+  const totalCompress = (compress - 100).toFixed(2)
+
+  res.send({normalizr: normalizedChat, porcentajeCompresion: `% ${totalCompress}`})
 })
 
 
