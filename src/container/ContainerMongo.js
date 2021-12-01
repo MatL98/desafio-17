@@ -1,15 +1,21 @@
 
 require("../db")
 
-const Msn = require("../MsnSchema")
+const Msn = require("../Models/MsnSchema")
+const Prod = require("../Models/ProductSchema")
 
 class ContainerMongo {
-  constructor() {
+  constructor(col) {
+    if (col === 'prod') {
+      this.collection = Prod
+    } else {
+      this.collection = Msn
+    }
   }
 
   async getById(id) {
     try {
-      const docs = await Msn.find({ _id: id });
+      const docs = await this.collection.find({ _id: id });
       if (docs.length == 0) {
         throw new Error("Error al listar por id: no encontrado");
       } else {
@@ -22,7 +28,7 @@ class ContainerMongo {
   }
   async getAll() {
     try {
-      let docs = await Msn.find({}, { __v: 0 }).lean();
+      let docs = await this.collection.find({}, { __v: 0 }).lean();
       return docs;
     } catch (error) {
       throw new Error(`Error al listar todo: ${error}`);
@@ -31,7 +37,7 @@ class ContainerMongo {
 
   async save(nuevoElem) {
     try {
-      let doc = await Msn.create(nuevoElem);
+      let doc = await this.collection.create(nuevoElem);
       return doc;
     } catch (error) {
       throw new Error(`Error al guardar: ${error}`);
@@ -40,7 +46,7 @@ class ContainerMongo {
 
   async update(nuevoElem) {
     try {
-      const { n, nModified } = await Msn.replaceOne(
+      const { n, nModified } = await this.collection.replaceOne(
         { _id: nuevoElem._id },
         nuevoElem
       );
@@ -56,7 +62,7 @@ class ContainerMongo {
 
   async deleteById(id) {
     try {
-      const { n, nDeleted } = await Msn.deleteOne({ _id: id });
+      const { n, nDeleted } = await this.collection.deleteOne({ _id: id });
       if (n == 0 || nDeleted == 0) {
         throw new Error("Error al borrar: no encontrado");
       }
@@ -67,7 +73,7 @@ class ContainerMongo {
 
   async deleteAll() {
     try {
-      await Msn.deleteMany({});
+      await this.collection.deleteMany({});
     } catch (error) {
       throw new Error(`Error al borrar: ${error}`);
     }
