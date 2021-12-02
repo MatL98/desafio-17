@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
-const http = require("http")
+const http = require("http");
 const server = http.createServer(app)
 const io = require("socket.io")(server)
 const PORT = process.env.PORT || 8080;
-const routerChat = require("./src/routes/chat")
-const routerProd = require("./src/routes/products")
 
+
+const routerProd = require("./src/routes/products")
+const routerLog = require("./src/routes/login")
 
 
 app.use(express.static(__dirname + "/public"));
@@ -16,18 +17,33 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use("/", routerChat)
+app.use("/", routerLog)
 app.use("/", routerProd)
 
+//normalizr
+const Contenedor = require("./src/dao/daoChat")
+const msnSchema = require("./src/Models/MsnSchema")
+const { normalize, schema, denormalize } = require("normalizr");
+
+
+let chat = new Contenedor()
+
+app.get("/chat", (req, res)=>{
+  res.sendFile("public/index.html", {root: "."})
+})
 
 io.on("connection" , (socket)=>{
-  console.log("User connected")
-  socket.emit("message", "")
+  console.log("User connected", socket.id)
+  const getChat = chat.getAll().then(res => socket.emit('server:msn', res))
   
-  socket.on("message-client", (data)=>{
-    console.log(data)
+  
+  socket.on("client:msn", (data)=>{
+    chat.save(data)
+    const get = chat.getAll()
+    get.then(res => socket.emit('server:msn', res))
   })
-  socket.on("new-message", function(data){
+
+  /* socket.on("new-message", function(data){
     console.log(data)
     let msn = {
       email: data.mail,
@@ -37,50 +53,29 @@ io.on("connection" , (socket)=>{
       avatar: data.avatar,
       message: data.msn
     }
-    io.sockets.emit("message", msn)
-  })
+    chat.save(msn)
+    io.sockets.emit("message", msn)}) */
 })
 
-//MongoAtlas - Configuracion Sesion
-const MongoStore = require("connect-mongo")
-const session = require("express-session")
-const advanceOptions = {useNewUrlparser: true, useUnifiedTopology: true}
-
-app.use(session({
-  store: MongoStore.create({
-    mongoUrl: "mongodb+srv://mat:fury8gb@cluster0.fpnkj.mongodb.net/ecommerce?retryWrites=true&w=majority",
-    mongoOptions: advanceOptions
-  }),
-  secret: "topSecret",
-  resave: true,
-  saveUninitialized: true
-}))
-
-app.get("/login", (req, res) => {
-  res.sendFile("/public/login/login.html", { root: "." });
-  const user = req.query.name;
-  console.log(user);
-  req.session.users = user
-  console.log(req.session);
-});
-
-
-app.get("/logout", (req, res) => {
-  req.session.destroy((err)=>{
-    if (err) {
-      res.send("hay un error")
-    } else {
-      res.send(`Hasta luego ${req.session.users}`)
-      function logout() {
-        res.redirect("/login")
-        return
-      }
-      setTimeout(logout, 3000);
-    }
+app.get("/chat", async (req, res)=>{
+  const getMns = await chat.getAll()
+  const schemaAutor = new schema.Entity('author',{msnSchema}, {idAttribute: 'mail'})
+  const mySchema = new schema.Array({
+    author: schemaAutor
   })
-  res.send("ok")
-});
+  const normalizedChat = normalize(getMns[0], mySchema)
+  const compressChat = JSON.stringify(normalizedChat).length
+  const denormalizeChat = denormalize(normalizedChat.result, mySchema, normalizedChat.entities)
+  const descompressChat = JSON.stringify(denormalizeChat).length
+  console.log(compressChat, descompressChat);
+  const compress = ((compressChat*100)/descompressChat)
+  const totalCompress = (compress - 100).toFixed(2)
+  
+  //res.send({normalizr: normalizedChat, porcentajeCompresion: `% ${totalCompress}`})
+  
+})
 
-server.listen(PORT, () => {
-  console.log(`Server is on port ${PORT}`);
-});
+
+server.listen(PORT, ()=>{
+  console.log(`server is running on port ${PORT}`);
+})
