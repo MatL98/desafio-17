@@ -1,12 +1,12 @@
-const express = require("express")
+/* const express = require("express")
 const app = express()
 const MongoStore = require("connect-mongo")
 const session = require("express-session")
 const advanceOptions = {useNewUrlparser: true, useUnifiedTopology: true}
 const {Router} = express
-const router = new Router()
+const router = new Router() */
 
-
+/* 
 
 
 app.use(session({
@@ -21,13 +21,16 @@ app.use(session({
   }))
   
 router.get("/login",  (req, res) => {
-    const user = req.query.name;
-    console.log(user);
-    req.session.users = user
-    console.log(req.session);
-    res.sendFile("/public/login.html", { root: "." });
+    res.sendFile("public/login.html", { root: "." });
   });
   
+router.post("/login",  (req, res) => {
+      let user = req.body.name 
+      console.log(user);
+      req.session.name = user
+      console.log(req.seesion.user);
+    });
+
 router.get("/logout", (req, res) => {
     req.session.destroy((err)=>{
       if (err) {
@@ -45,4 +48,4 @@ router.get("/logout", (req, res) => {
   });
 
 
-  module.exports = router
+  module.exports = router */

@@ -43,8 +43,6 @@ const socket = io();
  
 
   const getName = () =>{
-    let user = {
-      user: document.querySelector("#user").value
-    }
-    console.log(`el usuario es ${user}`);
-}
+      let user = document.querySelector("#user")
+      console.log(`el usuario es ${user}`);
+  } 

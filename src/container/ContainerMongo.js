@@ -3,13 +3,16 @@ require("../db")
 
 const Msn = require("../Models/MsnSchema")
 const Prod = require("../Models/ProductSchema")
+const User = require("../Models/UserSchema")
 
 class ContainerMongo {
   constructor(col) {
     if (col === 'prod') {
       this.collection = Prod
-    } else {
+    } else if (col === 'chat'){
       this.collection = Msn
+    } else{
+      this.collection = User
     }
   }
 
@@ -26,6 +29,8 @@ class ContainerMongo {
       throw new Error(`Error al listar por id: ${error}`);
     }
   }
+
+
   async getAll() {
     try {
       let docs = await this.collection.find({}, { __v: 0 }).lean();
