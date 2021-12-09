@@ -15,11 +15,14 @@
 <body>
   <div class="container">
     <h1>Login</h1>
-    <form action="/login" method="post" >
+    <form action="api/auth/login" method="post">
       <input type="text" name="username" placeholder="Ingresa tu mail" id="mail">
       <input type="password" name="password" placeholder="Ingresa tu password" id="pass">
       <input type="submit" value="Enviar">
     </form>
+  </div>
+  <div class="container">
+    <h3>No tienes usuario? - Registrate <a href="/signup.html">Sign Up</a></h3>
   </div>
 
 

@@ -1,28 +1,27 @@
+require("../db");
 
-require("../db")
-
-const Msn = require("../Models/MsnSchema")
-const Prod = require("../Models/ProductSchema")
-const User = require("../Models/UserSchema")
+const Msn = require("../Models/MsnSchema");
+const Prod = require("../Models/ProductSchema");
+const User = require("../Models/UserSchema");
 
 class ContainerMongo {
   constructor(col) {
-    if (col === 'prod') {
-      this.collection = Prod
-    } else if (col === 'chat'){
-      this.collection = Msn
-    } else{
-      this.collection = User
+    if (col === "prod") {
+      this.collection = Prod;
+    } else if (col === "chat") {
+      this.collection = Msn;
+    } else {
+      this.collection = User;
     }
   }
 
   async getById(id) {
     try {
-      const docs = await this.collection.find({ _id: id });
+      const docs = await this.collection.find({ username: id });
       if (docs.length == 0) {
         throw new Error("Error al listar por id: no encontrado");
       } else {
-        const result = docs
+        const result = docs;
         return result;
       }
     } catch (error) {
@@ -30,6 +29,19 @@ class ContainerMongo {
     }
   }
 
+  async getUser(username) {
+    try {
+      const docs = await this.collection.find({ username: username });
+      if (docs.length == 0) {
+        throw new Error("Error al listar por id: no encontrado");
+      } else {
+        const result = docs;
+        return result;
+      }
+    } catch (error) {
+      throw new Error(`Error al listar por id: ${error}`);
+    }
+  }
 
   async getAll() {
     try {
@@ -58,7 +70,7 @@ class ContainerMongo {
       if (n == 0 || nModified == 0) {
         throw new Error("Error al actualizar: no encontrado");
       } else {
-        return (nuevoElem);
+        return nuevoElem;
       }
     } catch (error) {
       throw new Error(`Error al actualizar: ${error}`);
