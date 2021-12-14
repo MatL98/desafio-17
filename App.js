@@ -13,6 +13,8 @@ const { normalize, schema, denormalize } = require("normalizr");
 const routerProd = require("./src/routes/products");
 const routerLogin = require("./src/routes/login");
 const routerChat = require("./src/routes/chat")
+const routerProcess = require("./src/routes/processInfo")
+const routerRandom = require("./src/routes/random")
 
 //Passport
 const MongoStore = require("connect-mongo");
@@ -20,6 +22,22 @@ const session = require("express-session");
 const advanceOptions = { useNewUrlparser: true, useUnifiedTopology: true };
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
+
+const { fork } = require("child_process")
+
+//DotEnv
+const dotenv = require("dotenv")
+dotenv.config()
+
+//yargs
+const yargs = require('yargs/yargs')(process.argv.slice(2))
+
+const args = yargs.default({
+  PORT:"8080"
+}).alias({
+  p:'PORT'
+}).argv
+
 
 const app = express();
 
@@ -104,12 +122,21 @@ passport.use(
   )
 );
 
-
+app.get("/api/random", (req, res)=>{
+  const numbers = req.query.cant
+  let getNum = fork("./src/getRandom.js")
+  getNum.send("listo")
+  getNum.on("message", (random)=>{
+    res.send({claves: random})
+  })
+}) 
 
 // mount routess
 app.use("/api/productos", routerProd);
 app.use("/api/auth", routerLogin);
 app.use("/api/chat", routerChat);
+app.use("/api/info", routerProcess);
+//app.use("/api/random", routerRandom);
 
 app.get('/test', (req, res)=>{
   console.log(req.session)
@@ -118,7 +145,7 @@ app.get('/test', (req, res)=>{
 
 
 //  server
-const PORT = process.env.PORT || 8080;
+const PORT = args.p || args.PORT
 
 //Server io
 const server = http.createServer(app);

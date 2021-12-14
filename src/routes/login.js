@@ -27,7 +27,7 @@ router.post(
   })
 );
 
-router.post("/logout", (req, res) => {
+router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       res.send("hay un error");

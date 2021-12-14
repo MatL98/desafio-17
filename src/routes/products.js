@@ -7,7 +7,7 @@ const Contenedor = require("../dao/daoProd")
 
 let product = new Contenedor;
 
-  router.get("/productos-test", async (req, res) => {
+  router.get("/", async (req, res) => {
     for (let i = 0; i < 5; i++) {
         const products = {
           name: faker.commerce.product(),
