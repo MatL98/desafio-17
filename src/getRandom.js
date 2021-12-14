@@ -1,14 +1,18 @@
 function randomNumber(quantity) {
-    let nums = 0
+    let nums = []
     for(let i = 1; i <= quantity; i++){
-        nums = (Math.random() * 1000)
+        nums[i] = (Math.random() * 1000)
     }
     return nums
 }
 
+
 process.on("message", (message)=>{
-    if(message === "listo"){
-        let random = randomNumber(Math.pow(10, 10))
+    if(message > 1){
+        let random = randomNumber(message)
+        process.send(random)
+    }else{
+        let random = randomNumber(Math.pow(10, 8))
         process.send(random)
     }
 })

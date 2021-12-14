@@ -125,7 +125,11 @@ passport.use(
 app.get("/api/random", (req, res)=>{
   const numbers = req.query.cant
   let getNum = fork("./src/getRandom.js")
-  getNum.send("listo")
+  if(numbers){
+    getNum.send(numbers)
+  }else{
+    getNum.send(0)
+  }
   getNum.on("message", (random)=>{
     res.send({claves: random})
   })
@@ -138,10 +142,6 @@ app.use("/api/chat", routerChat);
 app.use("/api/info", routerProcess);
 //app.use("/api/random", routerRandom);
 
-app.get('/test', (req, res)=>{
-  console.log(req.session)
-  res.send('ok')
-})
 
 
 //  server
