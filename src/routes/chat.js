@@ -1,5 +1,5 @@
 const express = require("express");
-const app = require("../../App")
+const app = require("../../app")
 const http = require("http");
 //Server io
 const server = http.createServer(app);
@@ -10,22 +10,37 @@ const io = require("socket.io")(server);
 const Contenedor = require("../dao/daoChat");
 const msnSchema = require("../Models/MsnSchema");
 const { normalize, schema, denormalize } = require("normalizr");
-
 const { Router } = express;
 const router = new Router();
-
 let chat = new Contenedor();
+
+const {createLogger, format, transports} = require("winston")
+
+const logger = createLogger({
+  transports:[
+    new transports.File({
+      filename: "error.log",
+      level: "error"
+    })
+  ]
+})
+
 
 // socket connection
 io.on("connection", (socket) => {
   console.log("User connected", socket.id);
   const getChat = chat.getAll().then((res) => socket.emit("server:msn", res));
 
-  socket.on("client:msn", (data) => {
-    chat.save(data);
-    const get = chat.getAll();
-    get.then((res) => socket.emit("server:msn", res));
-  });
+  try {
+    socket.on("client:msn", (data) => {
+      chat.save(data);
+      const get = chat.getAll();
+      get.then((res) => socket.emit("server:msn", res));
+    });
+  } catch (error) {
+    logger.log("error", error)
+  }
+  
 });
 
 // route mount

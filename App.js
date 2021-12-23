@@ -23,7 +23,15 @@ const advanceOptions = { useNewUrlparser: true, useUnifiedTopology: true };
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
+const cluster = require("cluster")
+const CPUs = require("os").cpus().length
 const { fork } = require("child_process")
+
+//compression
+const compression = require('compression')
+
+//winston
+const {createLogger, format, transports} = require("winston")
 
 //DotEnv
 const dotenv = require("dotenv")
@@ -31,6 +39,7 @@ dotenv.config()
 
 //yargs
 const yargs = require('yargs/yargs')(process.argv.slice(2))
+
 
 const args = yargs.default({
   PORT:"8080"
@@ -61,6 +70,15 @@ const app = express();
   );
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(compression())
+
+const logger = createLogger({
+  transports:[
+    new transports.Console({
+      level: "verbose"
+    })
+  ]
+})
 
 
 const ContenedorUser = require("./src/dao/daoUser");
@@ -107,7 +125,7 @@ passport.use(
 
         
       if (usr.username) {
-        console.log("el usuario ya existe");
+        logger.log("info", "el usuario ya existe");
         return done(done, false);
       } else {
         let user = {
@@ -115,7 +133,7 @@ passport.use(
           password: password,
         };
         users.save(user);
-        console.log("Usario creado!");
+        logger.log("info", "Usario creado!");
       }
       return done();
     }
@@ -124,7 +142,7 @@ passport.use(
 
 app.get("/api/random", (req, res)=>{
   const numbers = req.query.cant
-  let getNum = fork("./src/getRandom.js")
+  let getNum = 0
   if(numbers){
     getNum.send(numbers)
   }else{
@@ -133,6 +151,7 @@ app.get("/api/random", (req, res)=>{
   getNum.on("message", (random)=>{
     res.send({claves: random})
   })
+  logger.log("info", "numero enviado")
 }) 
 
 // mount routess
@@ -144,16 +163,29 @@ app.use("/api/info", routerProcess);
 
 
 
+
 //  server
-const PORT = args.p || args.PORT
+const PORT = process.argv[2] || args.PORT
 
 //Server io
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 
 
-server.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
-});
+if (process.argv[2] === "FORK") {
+  for (let i = 0; i < CPUs; i++) {
+      cluster.fork();
+  }
+  cluster.on("exit", (work, code, signal)=>{
+      console.log(`Process ${process.pid} died`);
+      cluster.fork()
+  })
+}else{
+  server.listen(PORT, () => {
+    logger.log("info", `server is running on port ${PORT}`);
+  });
+} 
+
+
 
 module.exports = app

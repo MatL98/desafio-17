@@ -3,7 +3,17 @@ const { Router } = express;
 const router = new Router();
 const faker = require("faker");
 const Contenedor = require("../dao/daoProd")
+const {createLogger, format, transports} = require("winston")
 
+
+const logger = createLogger({
+  transports:[
+    new transports.File({
+      filename: "error.log",
+      level: "error"
+    })
+  ]
+})
 
 let product = new Contenedor;
 
@@ -17,9 +27,13 @@ let product = new Contenedor;
       await product.save(products)
       }
 
-
-    const getProd = await product.getAll()
-    res.send(getProd);
+    try {
+      const getProd = await product.getAll()
+      res.send(getProd);
+    } catch (error) {
+      logger.log("error", error)
+    }
+    
   });
 
 
