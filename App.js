@@ -91,7 +91,7 @@ app.use("/api/chat", routerChat);
 
 
 //  server
-const PORT = process.argv[2] || 8081
+const PORT = 8081
 
 //Server io
 const server = http.createServer(app);
