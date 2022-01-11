@@ -88,7 +88,9 @@ app.use("/api/chat", routerChat);
 //app.use("/api/random", routerRandom);
 
 
-
+app.get("/", (req, res) =>{
+  res.send("login.html")
+}) 
 
 //  server
 const PORT = 8081
