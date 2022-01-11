@@ -21,11 +21,11 @@ const MongoStore = require("connect-mongo");
 const session = require("express-session");
 const advanceOptions = { useNewUrlparser: true, useUnifiedTopology: true };
 const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
 
-const cluster = require("cluster")
+
+/* const cluster = require("cluster")
 const CPUs = require("os").cpus().length
-const { fork } = require("child_process")
+const { fork } = require("child_process") */
 
 //compression
 const compression = require('compression')
@@ -47,7 +47,7 @@ const args = yargs.default({
   p:'PORT'
 }).argv
 
-
+require("./src/lib/passport")
 const app = express();
 
 // middlewares
@@ -72,93 +72,19 @@ const app = express();
   app.use(passport.session());
   app.use(compression())
 
-const logger = createLogger({
+/* const logger = createLogger({
   transports:[
     new transports.Console({
       level: "verbose"
     })
   ]
-})
-
-
-const ContenedorUser = require("./src/dao/daoUser");
-let users = new ContenedorUser();
-
-
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
-
-passport.deserializeUser((user, done)=>{
-  let usr = users.getUser(user)
-  done(null, usr.username)
-}) 
-
-
-passport.use(
-  "local-login",
-  new LocalStrategy(async function (username, password, done) {
-    let user = await users.getUser(username);
-   
-    if (user[0].username) {
-      return done(null, user);
-    }
-    return done(null, false);
-  })
-);
-
-passport.use(
-  "local-signup",
-  new LocalStrategy(
-    {
-      usernameField: "username",
-      passwordField: "password",
-      passReqToCallback: true,
-    },
-    (req, username, password, done) => {
-          let us = users.getAll().then((us)=>{
-            us.map((u)=>{
-            let usr = u.username
-            return usr
-          })
-        })
-
-        
-      if (usr.username) {
-        logger.log("info", "el usuario ya existe");
-        return done(done, false);
-      } else {
-        let user = {
-          username: username,
-          password: password,
-        };
-        users.save(user);
-        logger.log("info", "Usario creado!");
-      }
-      return done();
-    }
-  )
-);
-
-app.get("/api/random", (req, res)=>{
-  const numbers = req.query.cant
-  let getNum = 0
-  if(numbers){
-    getNum.send(numbers)
-  }else{
-    getNum.send(0)
-  }
-  getNum.on("message", (random)=>{
-    res.send({claves: random})
-  })
-  logger.log("info", "numero enviado")
-}) 
+}) */
 
 // mount routess
 app.use("/api/productos", routerProd);
 app.use("/api/auth", routerLogin);
 app.use("/api/chat", routerChat);
-app.use("/api/info", routerProcess);
+//app.use("/api/info", routerProcess);
 //app.use("/api/random", routerRandom);
 
 
@@ -172,7 +98,7 @@ const server = http.createServer(app);
 const io = require("socket.io")(server);
 
 
-if (process.argv[2] === "FORK") {
+/* if (process.argv[2] === "FORK") {
   for (let i = 0; i < CPUs; i++) {
       cluster.fork();
   }
@@ -185,7 +111,11 @@ if (process.argv[2] === "FORK") {
     logger.log("info", `server is running on port ${PORT}`);
   });
 } 
+ */
 
+server.listen(PORT, () => {
+  console.log(("info", `server is running on port ${PORT}`));
+});
 
 
 module.exports = app

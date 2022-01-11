@@ -5,38 +5,23 @@ const Prod = require("../Models/ProductSchema");
 const User = require("../Models/UserSchema");
 
 class ContainerMongo {
-  constructor(col) {
-    if (col === "prod") {
+  constructor(collection) {
+    if (collection === "prod") {
       this.collection = Prod;
-    } else if (col === "chat") {
+    } else if (collection === "chat") {
       this.collection = Msn;
     } else {
       this.collection = User;
     }
   }
 
-  async getById(id) {
-    try {
-      const docs = await this.collection.find({ username: id });
-      if (docs.length == 0) {
-        throw new Error("Error al listar por id: no encontrado");
-      } else {
-        const result = docs;
-        return result;
-      }
-    } catch (error) {
-      throw new Error(`Error al listar por id: ${error}`);
-    }
-  }
-
   async getUser(username) {
     try {
-      const docs = await this.collection.find({ username: username });
-      if (docs.length == 0) {
+      const user = await this.collection.find({ username: username });
+      if (!user) {
         throw new Error("Error al listar por id: no encontrado");
       } else {
-        const result = docs;
-        return result;
+        return user;
       }
     } catch (error) {
       throw new Error(`Error al listar por id: ${error}`);
@@ -79,8 +64,8 @@ class ContainerMongo {
 
   async deleteById(id) {
     try {
-      const { n, nDeleted } = await this.collection.deleteOne({ _id: id });
-      if (n == 0 || nDeleted == 0) {
+      const user = await this.collection.deleteOne({ _id: id });
+      if (!user) {
         throw new Error("Error al borrar: no encontrado");
       }
     } catch (error) {

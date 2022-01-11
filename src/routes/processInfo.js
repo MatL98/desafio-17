@@ -1,4 +1,4 @@
-const express = require("express");
+/* const express = require("express");
 const CPUs = require("os").cpus().length
 
 const { Router } = express;
@@ -60,3 +60,4 @@ router.get("/", (req, res)=>{
 
 
 module.exports = router;
+ */

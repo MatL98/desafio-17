@@ -8,7 +8,7 @@ const ProdSchema = new Schema({
     name: {type: String, require: true},
     price: {type: Number, require: true},
     thumbnail: {type: String, require: true}
-  
+
 })
 
 module.exports = model(prodCollection, ProdSchema)
