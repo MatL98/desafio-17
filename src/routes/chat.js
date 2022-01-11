@@ -1,5 +1,5 @@
 const express = require("express");
-const app = require("../../app")
+const app = require("../../App")
 const http = require("http");
 //Server io
 const server = http.createServer(app);
