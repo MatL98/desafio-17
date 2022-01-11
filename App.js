@@ -38,14 +38,14 @@ const dotenv = require("dotenv")
 dotenv.config()
 
 //yargs
-const yargs = require('yargs/yargs')(process.argv.slice(2))
+/* const yargs = require('yargs/yargs')(process.argv.slice(2))
 
 
 const args = yargs.default({
   PORT:"8080"
 }).alias({
   p:'PORT'
-}).argv
+}).argv */
 
 require("./src/lib/passport")
 const app = express();
@@ -91,7 +91,7 @@ app.use("/api/chat", routerChat);
 
 
 //  server
-const PORT = process.argv[2] || args.PORT
+const PORT = process.argv[2] || 8081
 
 //Server io
 const server = http.createServer(app);

@@ -1,1 +1,1 @@
-web: node app.js -p 8080
+web: node app.js
