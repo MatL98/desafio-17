@@ -93,11 +93,11 @@ app.get("/", (req, res) =>{
 }) 
 
 //  server
-const PORT = 8081
+const PORT = process.env.PORT || 8081
 
 //Server io
-//const server = http.createServer(app);
-//const io = require("socket.io")(server);
+const server = http.createServer(app);
+const io = require("socket.io")(server);
 
 
 /* if (process.argv[2] === "FORK") {
@@ -115,7 +115,7 @@ const PORT = 8081
 } 
  */
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(("info", `server is running on port ${PORT}`));
 });
 
