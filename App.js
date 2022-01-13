@@ -89,7 +89,7 @@ app.use("/api/auth", routerLogin);
 
 
 app.get("/", (req, res) =>{
-  res.send("login.html")
+  res.send("hola")
 }) 
 
 //  server
