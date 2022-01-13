@@ -55,7 +55,7 @@ const app = express();
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
   app.use(express.json());
-  /* app.use(
+  app.use(
     session({
       store: MongoStore.create({
         mongoUrl:
@@ -67,7 +67,7 @@ const app = express();
       resave: true,
       saveUninitialized: true,
     })
-  ); */
+  );
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(compression())
@@ -87,10 +87,6 @@ app.use("/api/auth", routerLogin);
 //app.use("/api/info", routerProcess);
 //app.use("/api/random", routerRandom);
 
-
-app.get("/", (req, res) =>{
-  res.send("hola")
-}) 
 
 //  server
 const PORT = process.env.PORT || 8081
