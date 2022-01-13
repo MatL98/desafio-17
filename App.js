@@ -59,7 +59,7 @@ const app = express();
     session({
       store: MongoStore.create({
         mongoUrl:
-          "mongodb+srv://mat:fury8gb@cluster0.fpnkj.mongodb.net/ecommerce?retryWrites=true&w=majority",
+          "mongodb+srv://mat:fury8gb@cluster0.fpnkj.mongodb.net/ecommerce?retryWrites=true&w=majority" || process.env.SERVER ,
         mongoOptions: advanceOptions,
       }),
       secret: "topSecret",
