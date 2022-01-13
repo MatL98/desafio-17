@@ -1,4 +1,4 @@
-const express = require("express");
+/* const express = require("express");
 const app = require("../../App")
 const http = require("http");
 //Server io
@@ -49,7 +49,7 @@ router.get("/chat", (req, res) => {
     //let users = users.getUser(user)
     done(null, user.username)
   }) */
-});
+/* });
 
 router.get("/chatNormalizr", async (req, res) => {
   const getMns = await chat.getAll();
@@ -81,4 +81,4 @@ router.get("/chatNormalizr", async (req, res) => {
   });
 });
 
-module.exports = router
+module.exports = router */

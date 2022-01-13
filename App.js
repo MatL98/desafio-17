@@ -83,7 +83,7 @@ const app = express();
 // mount routess
 app.use("/api/productos", routerProd);
 app.use("/api/auth", routerLogin);
-app.use("/api/chat", routerChat);
+//app.use("/api/chat", routerChat);
 //app.use("/api/info", routerProcess);
 //app.use("/api/random", routerRandom);
 
