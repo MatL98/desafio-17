@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+/* const mongoose = require("mongoose")
 
 mongoose.connect("mongodb://localhost:27017/ecommerce") 
 
@@ -9,5 +9,5 @@ mongoose.connection.on("open", ()=>{
 mongoose.connection.on("error", ()=>{
   console.log("connection error");
 })
-
+ */
 
