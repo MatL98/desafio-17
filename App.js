@@ -97,7 +97,7 @@ const PORT = 8081
 
 //Server io
 const server = http.createServer(app);
-const io = require("socket.io")(server);
+//const io = require("socket.io")(server);
 
 
 /* if (process.argv[2] === "FORK") {
