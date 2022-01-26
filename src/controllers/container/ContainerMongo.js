@@ -1,8 +1,8 @@
-require("../db");
+require("../service/db");
 
-const Msn = require("../Models/MsnSchema");
-const Prod = require("../Models/ProductSchema");
-const User = require("../Models/UserSchema");
+const Msn = require("../models/MsnSchema");
+const Prod = require("../models/ProductSchema");
+const User = require("../models/UserSchema");
 
 class ContainerMongo {
   constructor(collection) {

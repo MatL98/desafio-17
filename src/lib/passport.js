@@ -1,6 +1,6 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const ContenedorUser = require("../dao/daoUser");
+const ContenedorUser = require("../controllers/dao/daoUser");
 let users = new ContenedorUser();
 
 const bcrypt = require('bcrypt')

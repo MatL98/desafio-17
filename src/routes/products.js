@@ -2,7 +2,7 @@ const express = require("express")
 const { Router } = express;
 const router = new Router();
 const faker = require("faker");
-const Contenedor = require("../dao/daoProd")
+const Contenedor = require("../controllers/dao/daoProd")
 const {createLogger, format, transports} = require("winston")
 
 

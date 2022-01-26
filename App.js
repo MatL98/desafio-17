@@ -5,8 +5,8 @@ const http = require("http");
 const cookieParser = require("cookie-parser");
 
 //normalizr
-const Contenedor = require("./src/dao/daoChat");
-const msnSchema = require("./src/Models/MsnSchema");
+const Contenedor = require("./src/controllers/dao/daoChat");
+const msnSchema = require("./src/models/MsnSchema");
 const { normalize, schema, denormalize } = require("normalizr");
 
 //Routes
@@ -34,8 +34,8 @@ const compression = require('compression')
 const {createLogger, format, transports} = require("winston")
 
 //DotEnv
-const dotenv = require("dotenv")
-dotenv.config()
+require("dotenv").config()
+
 
 //yargs
 /* const yargs = require('yargs/yargs')(process.argv.slice(2))
@@ -58,8 +58,7 @@ const app = express();
   app.use(
     session({
       store: MongoStore.create({
-        mongoUrl:
-          "mongodb+srv://mat:fury8gb@cluster0.fpnkj.mongodb.net/ecommerce?retryWrites=true&w=majority" || process.env.SERVER ,
+        mongoUrl:process.env.MONGO_URI || process.env.SERVER ,
         mongoOptions: advanceOptions,
       }),
       secret: "topSecret",
