@@ -15,6 +15,7 @@ const routerLogin = require("./src/routes/login");
 const routerChat = require("./src/routes/chat")
 const routerProcess = require("./src/routes/processInfo")
 const routerRandom = require("./src/routes/random")
+const routerGraphql = require("./src/service/server")
 
 //Passport
 const MongoStore = require("connect-mongo");
@@ -79,9 +80,13 @@ const app = express();
   ]
 }) */
 
+
+
 // mount routess
 app.use("/api/productos", routerProd);
 app.use("/api/auth", routerLogin);
+app.use("/graphql", routerGraphql)
+
 //app.use("/api/chat", routerChat);
 //app.use("/api/info", routerProcess);
 //app.use("/api/random", routerRandom);
