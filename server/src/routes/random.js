@@ -1,13 +1,13 @@
-/* const express = require("express");
+/* const Router = require("koa-router")
 
 const { fork } = require("child_process")
 
-const { Router } = express;
-const router = new Router();
+const router = new Router({
+  prefix: "/api/random"
+})
 
-
-router.get("/api/random", (req, res)=>{
-  const numbers = req.query.cant
+router.get("/", ctx =>{
+  const numbers = ctx.request.cant
   let getNum = 0
   if(numbers){
     getNum.send(numbers)

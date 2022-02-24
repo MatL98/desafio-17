@@ -1,8 +1,10 @@
-const express = require("express");
-const http = require("http");
+const Koa = require("koa")
+const koaBody = require("koa-body")
+
+const app = new Koa()
 
 //cookie
-const cookieParser = require("cookie-parser");
+app.use(koaBody())
 
 //normalizr
 const Contenedor = require("./src/controllers/dao/daoChat");
@@ -52,10 +54,6 @@ require("./src/lib/passport")
 const app = express();
 
 // middlewares
-  app.use(express.static(__dirname + "/public"));
-  app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(express.json());
   app.use(
     session({
       store: MongoStore.create({
@@ -83,9 +81,9 @@ const app = express();
 
 
 // mount routess
-app.use("/api/productos", routerProd);
-app.use("/api/auth", routerLogin);
-app.use("/graphql", routerGraphql)
+app.use(routerProd.routes());
+app.use(routerLogin.routes());
+app.use(routerGraphql.routes())
 
 //app.use("/api/chat", routerChat);
 //app.use("/api/info", routerProcess);

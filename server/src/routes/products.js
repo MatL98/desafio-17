@@ -1,9 +1,10 @@
-const express = require("express");
-const { Router } = express;
-const router = new Router();
+const Router = require("koa-router")
 const { createLogger, format, transports } = require("winston");
 const Contenedor = require("../controllers/dao/daoProd");
 let products = new Contenedor();
+const router = new Router({
+  prefix: "/api/productos"
+})
 
 const logger = createLogger({
   transports: [
@@ -14,36 +15,38 @@ const logger = createLogger({
   ],
 });
 
-router.get("/", async (req, res) => {
-  const getProd = await products.getAll()
-  res.json(getProd);
+router.get("/", ctx => {
+  const getProd = products.getAll()
+  ctx.body = {data: getProd}
 });
-router.get("/:id", async (req, res) => {
-  let id = req.params.id;
+router.get("/:id", ctx => {
+  let id = ctx.params.id;
   const getId = await products.getById(id);
-  res.send(`El producto con ${id} se encontro ${{ getId }}`);
+  ctx.body = {data: `El producto con ${id} se encontro ${{ getId }}`};
 });
 
-router.post("/", async (req, res) => {
-  let { name , price, thumbnail } = req.body;
+router.post("/", ctx => {
+  let { name , price, thumbnail } = ctx.request.body
   const obj = {
     name,
     price,
     thumbnail
   };
   const save = await products.save(obj);
-
-  res.status(201).send(save);
+  ctx.request.status(201)
+  ctx.body = {data: save}
 });
-router.put("/:id", async (req, res) => {
-  let id = req.params.id;
+router.put("/:id", ctx => {
+  let id = ctx.params.id;
   const updateById = await products.getById(id);
-  res.status(201).send(updateById);
+  ctx.response.status(201)
+  ctx.body = {data:updateById}
 });
-router.delete("/:id", async (req, res) => {
-  let id = req.params.id;
+router.delete("/:id", ctx => {
+  let id = ctx.params.id;
   const deleted = await products.deleteById(id);
-  res.send(deleted);
+  ctx.response.status(201)
+  ctx.body = {data: deleted}
 });
 
 module.exports = router;

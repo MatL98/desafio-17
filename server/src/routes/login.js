@@ -1,11 +1,9 @@
-const express = require("express");
+const Router = require("koa-router")
 const passport = require("passport");
 
-
-
-const { Router } = express;
-const router = new Router();
-
+const router = new Router({
+  prefix: "/api/auth"
+})
 
 router.post(
   "/login",
@@ -23,8 +21,8 @@ router.post(
   })
 );
 
-router.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
+router.get("/logout", ctx => {
+  ctx.session.destroy((err) => {
     if (err) {
       res.send("hay un error");
     } else {
